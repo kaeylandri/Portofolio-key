@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Keylandri</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* semua CSS kamu tetap, tidak berubah */
+        :root {
+            --primary: #00a8ff;
+            --secondary: #8a2be2;
+            --bg: #f9f9f9;
+            --text-dark: #000000;
+            --text-light: #333333;
+            --card-bg: rgba(0,0,0,0.05);
+        }
+        body.dark-mode {
+            --primary: #00f0ff;
+            --secondary: #8a2be2;
+            --bg: #0a0a0a;
+            --text-dark: #ffffff;
+            --text-light: #cccccc;
+            --card-bg: rgba(255,255,255,0.05);
+        }
+        * {
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+        .theme-toggle {
+            position: fixed; top: 15px; right: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none; color: white; font-size: 18px;
+            padding: 8px 12px; border-radius: 20px;
+            cursor: pointer; z-index: 1000;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            text-align: center; padding: 60px 20px;
+        }
+        header img {
+            width: 170px; height: 170px; object-fit: cover;
+            border-radius: 50%; border: 4px solid white;
+            margin-bottom: 20px; box-shadow: 0 0 20px var(--primary);
+            transition: transform 0.3s ease;
+        }
+        header img:hover { transform: scale(1.1); }
+        header h1 { font-size: 2.5rem; margin: 10px 0; color: white; }
+        header p { font-size: 1.2rem; color: var(--text-light); }
+        section { padding: 60px 20px; max-width: 1100px; margin: auto; }
+        h2 { text-align: center; margin-bottom: 30px; color: var(--primary); font-size: 2rem; text-shadow: 0 0 10px var(--primary); }
+        .about p { text-align: center; max-width: 750px; margin: auto; line-height: 1.6; }
+        .skills { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+        .skill { background: rgba(255,255,255,0.1); padding: 10px 18px; border-radius: 25px; font-size: 0.95rem; color: var(--text-light); border: 1px solid var(--primary); box-shadow: 0 0 5px var(--primary); transition: all 0.3s ease; }
+        .skill:hover { background: var(--primary); color: white; transform: translateY(-3px); box-shadow: 0 0 15px var(--primary); }
+        .portfolio { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .project { background: var(--card-bg); border-radius: 12px; overflow: hidden; text-align: center; border: 1px solid var(--primary); box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .project:hover { transform: translateY(-8px); box-shadow: 0 0 25px var(--primary); }
+        .project img { width: 100%; height: 180px; object-fit: cover; }
+        .project h3 { margin: 15px 0 5px; color: var(--primary); }
+        .project p { padding: 0 15px 20px; color: var(--text-light); }
+        .social-links { text-align: center; margin-top: 20px; }
+        .social-links a { display: inline-block; margin: 8px; font-size: 1.5rem; color: var(--primary); transition: all 0.3s ease; text-decoration: none; }
+        .social-links a:hover { color: var(--secondary); text-shadow: 0 0 10px var(--secondary); }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .contact-form { max-width: 600px; margin: 20px auto; display: flex; flex-direction: column; gap: 12px; background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .contact-form input, .contact-form textarea { padding: 12px 15px; border: 1px solid var(--primary); border-radius: 10px; background: transparent; color: var(--text-dark); font-size: 1rem; outline: none; transition: border 0.3s ease, box-shadow 0.3s ease; }
+        .contact-form input:focus, .contact-form textarea:focus { border-color: var(--secondary); box-shadow: 0 0 10px var(--secondary); }
+        .contact-form button { padding: 12px; background: linear-gradient(45deg, var(--primary), var(--secondary)); border: none; border-radius: 10px; color: white; font-size: 1rem; cursor: pointer; font-weight: bold; box-shadow: 0 0 10px var(--primary); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .contact-form button:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--secondary); }
+        footer { background: var(--card-bg); text-align: center; padding: 20px; margin-top: 40px; font-size: 0.9rem; color: var(--text-light); border-top: 1px solid var(--primary); }
+        .popup { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+        .popup-content { position: relative; background: #fff; padding: 20px 30px; border-radius: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: fadeIn 0.4s ease-in-out; }
+        .close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #333; }
+        @keyframes fadeIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+    <header class="reveal">
+        <img src="media/Potofrofil.jpeg" alt="Foto Profil">
+        <h1>Keylandri</h1>
+        <p>Front-End Developer | Creative Designer</p>
+    </header>
+
+    <section class="about reveal">
+        <h2>Tentang Saya</h2>
+        <p>
+            Saya adalah seorang pengembang web yang fokus pada desain dan pengalaman pengguna.  
+            Suka membuat website yang modern, responsif, dan mudah digunakan.   
+            Di luar dunia pemrograman, saya memiliki hobi mengedit video, menonton film, dan membaca buku.  
+            Bagi saya, setiap proyek adalah kesempatan untuk belajar hal baru, mengasah keterampilan, dan memberikan karya terbaik.
+        </p>
+        <div class="skills">
+            <div class="skill">HTML</div>
+            <div class="skill">CSS</div>
+            <div class="skill">JavaScript</div>
+            <div class="skill">UI/UX Design</div>
+            <div class="skill">Video Editing</div>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Portofolio</h2>
+        <div class="portfolio">
+            <div class="project">
+                <img src="media/BKK4.png" alt="Proyek 1">
+                <h3>Bursa Kerja Khusus SMKN 4 Bandung</h3>
+                <p>Website untuk mengelola lowongan pekerjaan.</p>
+            </div>
+            <div class="project">
+                <img src="media/RootIron.jpeg" alt="Proyek 2">
+                <h3>Root Iron</h3>
+                <p>Proyek Game FBS 3D berbasis Unity.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Kontak & Sosial Media</h2>
+        <div class="social-links">
+            <a href="https://wa.me/qr/LBHHKMURLNLCB1" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.tiktok.com/@areyoubuu?_t=ZS-8yqOmyrUHWT&_r=1" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/kylrmdn___?igsh=c2NhM2xrN3Zvd21y" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Kirim Pesan</h2>
+        <form class="contact-form" id="contactForm" action="https://formspree.io/f/mrbabakv" method="POST">
+            <input type="text" id="nama" name="nama" placeholder="Nama Anda" required>
+            <input type="email" id="email" name="email" placeholder="Email Anda" required>
+            <textarea id="pesan" name="pesan" rows="5" placeholder="Tulis pesan Anda..." required></textarea>
+            <button type="submit">Kirim</button>
+        </form>
+    </section>
+
+    <!-- Popup Modal -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="closePopup">&times;</span>
+            <h3>🎉 Pesan Terkirim!</h3>
+            <p>Terima kasih <b id="namaUser"></b>, pesan kamu sudah diterima 🙌</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>2025 Keylandri Ramadhan. Semua hak dilindungi.</p>
+    </footer>
+
+    <script>
+        // Animasi scroll
+        function revealOnScroll() {
+            let reveals = document.querySelectorAll(".reveal");
+            for (let i = 0; i < reveals.length; i++) {
+                let windowHeight = window.innerHeight;
+                let elementTop = reveals[i].getBoundingClientRect().top;
+                let elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", revealOnScroll);
+        window.addEventListener("load", revealOnScroll);
+
+        // Dark mode
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            const btn = document.querySelector(".theme-toggle");
+            btn.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+        }
+
+        // Form + Popup + Kirim ke Formspree
+        const form = document.getElementById("contactForm");
+        const popup = document.getElementById("popup");
+        const closePopup = document.getElementById("closePopup");
+        const namaUser = document.getElementById("namaUser");
+
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            let nama = document.getElementById("nama").value;
+
+            let formData = new FormData(form);
+            try {
+                let response = await fetch(form.action, {
+                    method: "POST",
+                    body: formData,
+                    headers: { "Accept": "application/json" }
+                });
+
+                if (response.ok) {
+                    namaUser.innerText = nama;
+                    form.reset();
+                    popup.style.display = "flex";
+                } else {
+                    alert("⚠️ Gagal mengirim pesan. Coba lagi ya.");
+                }
+            } catch (error) {
+                alert("⚠️ Terjadi error: " + error.message);
+            }
+        });
+
+        closePopup.addEventListener("click", function() {
+            popup.style.display = "none";
+        });
+        window.addEventListener("click", function(e) {
+            if (e.target === popup) {
+                popup.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
